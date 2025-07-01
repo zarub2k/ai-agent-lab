@@ -42,6 +42,7 @@ public class DevUtilityAgent {
     public static void main(String[] args) {
         System.out.println("Dev Utility Agent");
         InMemoryRunner runner = new InMemoryRunner(ROOT_AGENT);
+        
         Session session = runner.sessionService()
                 .createSession(AGENT_NAME, USER_ID)
                 .blockingGet();
