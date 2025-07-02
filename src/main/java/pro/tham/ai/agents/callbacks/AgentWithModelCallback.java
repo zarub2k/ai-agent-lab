@@ -12,8 +12,8 @@ import pro.tham.ai.agents.base.AgentExecutor;
  *
  * @author Tham
  */
-public class AgentWithBeforeModelCallback {
-    private static final String NAME = "callback-agent";
+public class AgentWithModelCallback {
+    private static final String NAME = "model-callback-agent";
     private static final String MODEL = "gemini-2.0-flash";
     
     public static void main(String[] args) {
@@ -37,6 +37,7 @@ public class AgentWithBeforeModelCallback {
                 .description("Personal agent to answer questions about the country and its capitals")
                 .instruction("You are a helful agent")
                 .beforeModelCallbackSync(beforeModelCallback)
+                .afterModelCallbackSync(afterModelCallback)
                 .build();
         
         System.out.println("Agent is about to be called");

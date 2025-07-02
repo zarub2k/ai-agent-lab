@@ -17,6 +17,7 @@ import java.util.Scanner;
  */
 public class AgentExecutor {
     public static void execute(BaseAgent agent, String agentName, String userId) {
+        System.out.println("AgentExecutor.execute()");
         InMemoryRunner runner = new InMemoryRunner(agent);
 
         Session session = runner.sessionService()
