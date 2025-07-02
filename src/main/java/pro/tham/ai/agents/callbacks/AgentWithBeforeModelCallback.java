@@ -4,6 +4,7 @@ import com.google.adk.agents.CallbackContext;
 import com.google.adk.agents.Callbacks;
 import com.google.adk.agents.LlmAgent;
 import com.google.adk.models.LlmRequest;
+import com.google.adk.models.LlmResponse;
 import java.util.Optional;
 import pro.tham.ai.agents.base.AgentExecutor;
 
@@ -20,7 +21,13 @@ public class AgentWithBeforeModelCallback {
         
         Callbacks.BeforeModelCallbackSync beforeModelCallback = 
                 (CallbackContext callbackContext, LlmRequest llmRequest) -> {
-                    System.out.println("Callback is called before model....: " + callbackContext.agentName());
+                    System.out.println("Callback before model: " + callbackContext.agentName());
+                    return Optional.empty();
+                };
+        
+        Callbacks.AfterModelCallbackSync afterModelCallback = 
+                (CallbackContext callbackContext, LlmResponse llmResponse) -> {
+                    System.out.println("Callback after model: " + callbackContext.agentName());
                     return Optional.empty();
                 };
         
