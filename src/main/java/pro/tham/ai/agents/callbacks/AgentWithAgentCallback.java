@@ -6,7 +6,6 @@ import com.google.adk.agents.LlmAgent;
 import com.google.adk.sessions.State;
 import com.google.genai.types.Content;
 import com.google.genai.types.Part;
-import io.reactivex.rxjava3.core.Maybe;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
