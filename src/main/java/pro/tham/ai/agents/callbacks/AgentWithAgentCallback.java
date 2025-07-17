@@ -31,13 +31,13 @@ public class AgentWithAgentCallback {
 
                 if (Boolean.TRUE.equals(state.get("skip_llm_agent"))) {
                     System.out.println("LLM agent call is skipped due the skip variable");
-                    return Maybe.just(
+                    return Optional.of(
                             Content.fromParts(
                                     Part.fromText("Agent is skipped due to skip value")
                             ));
                 }
 
-                return Maybe.empty();
+                return Optional.empty();
             };
     
     public void run() {
@@ -66,9 +66,5 @@ public class AgentWithAgentCallback {
         
         AgentExecutor.execute(llmAgent, NAME, MODEL,
                 new ConcurrentHashMap<>(Map.of("skip_llm_agent", true)), null);
-    }
-    
-    private void beforeAgentCallback(CallbackContext context) {
-    
     }
 }
