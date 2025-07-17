@@ -10,18 +10,21 @@ import io.reactivex.rxjava3.core.Flowable;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentMap;
+import javax.annotation.Nullable;
 
 /**
  *
  * @author Tham
  */
 public class AgentExecutor {
-    public static void execute(BaseAgent agent, String agentName, String userId) {
+    public static void execute(BaseAgent agent, String agentName, String userId, 
+        @Nullable ConcurrentMap<String, Object> state, @Nullable String sessionId) {
         System.out.println("AgentExecutor.execute()");
         InMemoryRunner runner = new InMemoryRunner(agent);
 
         Session session = runner.sessionService()
-                .createSession(agentName, userId)
+                .createSession(agentName, userId, state, sessionId)
                 .blockingGet();
 
         try (Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8)) {

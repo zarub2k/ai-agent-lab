@@ -41,6 +41,6 @@ public class AgentWithModelCallback {
                 .build();
         
         System.out.println("Agent is about to be called");
-        AgentExecutor.execute(llmAgent, NAME, MODEL);
+        AgentExecutor.execute(llmAgent, NAME, MODEL, null, null);
     }
 }
