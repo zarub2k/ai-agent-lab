@@ -4,7 +4,7 @@ import pro.tham.ai.agents.callbacks.AgentWithAgentCallback;
 
 /**
  *
- * @author THam
+ * @author Tham
  */
 public class AiAgentLabRunner {
     public static void main(String[] args) {

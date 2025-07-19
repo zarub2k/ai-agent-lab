@@ -16,6 +16,9 @@ import javax.annotation.Nullable;
 /**
  *
  * @author Tham
+ * GOOGLE_GENAI_USE_VERTEXAI=FALSE
+ * GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_API_KEY_HERE
+ * mvn clean compile exec:java
  */
 public class AgentExecutor {
     public static void execute(BaseAgent agent, String agentName, String userId, 

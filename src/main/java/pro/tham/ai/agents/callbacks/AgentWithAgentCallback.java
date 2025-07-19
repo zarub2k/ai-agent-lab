@@ -19,6 +19,7 @@ public class AgentWithAgentCallback {
     private static final String NAME = "agent-callback-agent";
     private static final String MODEL = "gemini-2.0-flash";
     
+    //Before agent callback
     Callbacks.BeforeAgentCallbackSync beforeAgent
             = (CallbackContext context) -> {
                 System.out.println("Before agent: ");
@@ -39,19 +40,16 @@ public class AgentWithAgentCallback {
                 return Optional.empty();
             };
     
+    //After agent callback
+    Callbacks.AfterAgentCallbackSync afterAgent
+            = (CallbackContext context) -> {
+                System.out.println("After agent: ");
+                return Optional.empty();
+            };
+    
     public void run() {
         System.out.println("*** AgentWithAgentCallback.run() ***");
-
-        //Before agent callback
         
-        
-        //After agent callback
-        Callbacks.AfterAgentCallbackSync afterAgent = 
-                (CallbackContext context) -> {
-                    System.out.println("After agent: ");
-                    return Optional.empty();
-                };
-
         LlmAgent llmAgent = LlmAgent.builder()
                 .name(NAME)
                 .model(MODEL)
@@ -63,7 +61,7 @@ public class AgentWithAgentCallback {
 
         AgentExecutor.execute(llmAgent, NAME, MODEL, null, null);
         
-        AgentExecutor.execute(llmAgent, NAME, MODEL,
-                new ConcurrentHashMap<>(Map.of("skip_llm_agent", true)), null);
+//        AgentExecutor.execute(llmAgent, NAME, MODEL,
+//                new ConcurrentHashMap<>(Map.of("skip_llm_agent", true)), null);
     }
 }
