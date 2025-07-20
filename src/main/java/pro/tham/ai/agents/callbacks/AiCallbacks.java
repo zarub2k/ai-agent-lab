@@ -25,9 +25,8 @@ public final class AiCallbacks {
                 if (Boolean.TRUE.equals(state.get("skip_llm_agent"))) {
                     System.out.println("LLM agent call is skipped due the skip variable");
                     return Optional.of(
-                            Content.fromParts(
-                                    Part.fromText("Agent is skipped due to skip value")
-                            ));
+                            buildContent("model", "Agent is skipped due to skip value"));
+                            
                 }
 
                 return Optional.empty();
@@ -40,14 +39,17 @@ public final class AiCallbacks {
                 State state = context.state();
                 if (Boolean.TRUE.equals(state.get("add_concluding_note"))) {
                     return Optional.of(
-                            Content.builder()
-                            .parts(
-                                    List.of(Part.fromText("Concluding note was added. Replacing original output with this one")))
-                            .role("model")
-                            .build()
-                    );
+                            buildContent("model", 
+                                    "Concluding note was added. Replacing original output with this one"));
                 }
                 
                 return Optional.empty();
             };
+    
+    public static Content buildContent(String role, String value) {
+        return Content.builder()
+                .parts(List.of(Part.fromText(value)))
+                .role(role)
+                .build();
+    }
 }
