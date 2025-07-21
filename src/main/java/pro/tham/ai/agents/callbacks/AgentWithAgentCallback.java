@@ -20,12 +20,12 @@ public class AgentWithAgentCallback {
                 .name(NAME)
                 .model(MODEL)
                 .description("Personal agent to answer questions about the country and its capitals")
-                .instruction("You are a helful agent")
+                .instruction("You are a helpful agent")
                 .beforeAgentCallbackSync(AiCallbacks.beforeAgent)
                 .afterAgentCallbackSync(AiCallbacks.afterAgent)
                 .build();
 
-//        AgentExecutor.execute(llmAgent, NAME, MODEL, null, null);
+        AgentExecutor.execute(llmAgent, NAME, MODEL, null, null);
 //        
 //        AgentExecutor.execute(llmAgent, NAME, MODEL,
 //                new ConcurrentHashMap<>(Map.of("skip_llm_agent", true)), null);
