@@ -19,8 +19,8 @@ public class AgentWithAgentCallback {
         LlmAgent llmAgent = LlmAgent.builder()
                 .name(NAME)
                 .model(MODEL)
-                .description("Personal agent to answer questions about the country and its capitals")
-                .instruction("You are a helpful agent")
+                .instruction("Personal agent to answer questions about the country and its capitals")
+                .description("You are a helpful agent")
                 .beforeAgentCallbackSync(AiCallbacks.beforeAgent)
                 .afterAgentCallbackSync(AiCallbacks.afterAgent)
                 .build();
