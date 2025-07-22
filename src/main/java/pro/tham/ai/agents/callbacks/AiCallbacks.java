@@ -9,6 +9,7 @@ import com.google.genai.types.Content;
 import com.google.genai.types.Part;
 import java.util.List;
 import java.util.Optional;
+import pro.tham.ai.agents.base.AiUtility;
 
 /**
  *
@@ -68,9 +69,30 @@ public final class AiCallbacks {
                 return Optional.empty();
             };
 
-    public static Callbacks.AfterModelCallbackSync afterModel
-            = (CallbackContext callbackContext, LlmResponse llmResponse) -> {
+    public static Callbacks.AfterModelCallbackSync afterModel =
+            (CallbackContext callbackContext, LlmResponse llmResponse) -> {
                 System.out.println("Callback after model: " + callbackContext.agentName());
+                
+                Content originalContent = llmResponse.content().get();
+                
+//                Optional<Part> firstTextPartOpt = llmResponse
+//                        .content()
+//                        .flatMap(Content::parts)
+//                        .filter(parts -> !parts.isEmpty() && parts.get(0).text().isPresent())
+//                        .map(parts -> parts.get(0));
+                String originalText = originalContent.parts().get().getLast().text().get();
+                
+                System.out.println("originalText: " + originalText);
+                String modifiedText = AiUtility.findAndReplace(originalText);
+                if (!"".equals(modifiedText)) {
+                    return Optional.of(
+                        LlmResponse
+                            .builder()
+                            .content(originalContent.toBuilder().parts(List.of(Part.fromText(modifiedText))).build())
+                            .groundingMetadata(llmResponse.groundingMetadata())
+                            .build());
+                }
+                
                 return Optional.empty();
             };
     

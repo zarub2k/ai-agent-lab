@@ -13,7 +13,7 @@ public class AgentWithModelCallback {
     private static final String NAME = "model-callback-agent";
     private static final String MODEL = "gemini-2.0-flash";
     
-    public static void main(String[] args) {
+    public void run() {
         System.out.println("*** Agent with before model callback ***");
         
         LlmAgent llmAgent = LlmAgent.builder()
