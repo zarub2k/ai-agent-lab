@@ -1,5 +1,6 @@
 package pro.tham.ai.agents.base;
 
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,5 +21,16 @@ public class AiUtility {
         }
         
         return matcher.replaceAll(REPLACE_TERM);
+    }
+    
+    public static Map<String, String> countriesWithCapitals(){
+        return Map.of(
+                "india", "New Delhi",
+                "england", "London",
+                "united States of America", "Washington, D.C.",
+                "canada", "Ottawa",
+                "australia", "Canberra",
+                "germany", "Berlin"
+        );
     }
 }

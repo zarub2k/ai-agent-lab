@@ -8,6 +8,7 @@ import com.google.adk.sessions.State;
 import com.google.genai.types.Content;
 import com.google.genai.types.Part;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import pro.tham.ai.agents.base.AiUtility;
 
@@ -93,6 +94,25 @@ public final class AiCallbacks {
                             .build());
                 }
                 
+                return Optional.empty();
+            };
+    
+    public static Callbacks.BeforeToolCallbackSync beforeTool =
+            (invocationContext, baseTool, input, toolContext) -> {
+                System.out.println("Callback before tool: " + invocationContext.agent().name());
+                System.out.println("Tool name: " + baseTool.name());
+                System.out.println("Input: " + input);
+                
+                if (input.get("country").equals("dummy")) {
+                    return Optional.of(Map.of("result", "Tool execution is blocked :("));
+                }
+                
+                return Optional.empty();
+            };
+    
+    public static Callbacks.AfterToolCallbackSync afterTool =
+            (invocationContext, baseTool, input, toolContext, response) -> {
+                System.out.println("After tool");
                 return Optional.empty();
             };
     

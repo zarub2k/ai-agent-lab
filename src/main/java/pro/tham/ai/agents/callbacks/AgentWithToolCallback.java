@@ -1,9 +1,11 @@
 package pro.tham.ai.agents.callbacks;
 
-import com.google.adk.agents.Callbacks;
 import com.google.adk.agents.LlmAgent;
-import java.util.Optional;
+import com.google.adk.tools.Annotations;
+import com.google.adk.tools.FunctionTool;
+import java.util.Map;
 import pro.tham.ai.agents.base.AgentExecutor;
+import pro.tham.ai.agents.base.AiUtility;
 
 /**
  *
@@ -15,28 +17,28 @@ public class AgentWithToolCallback {
 
     public void run() {
         System.out.println("*** AgentWithToolCallback.run() ***");
-
-        Callbacks.BeforeToolCallbackSync beforeTool =
-                (invocationContext, baseTool, input, toolContext) -> {
-                    return Optional.empty();
-                };
-
-        Callbacks.AfterToolCallbackSync afterTool = 
-                (invocationContext, baseTool, input, toolContext, response) -> {
-                    System.out.println("After tool");
-                    return Optional.empty();
-                };
-                
-
         LlmAgent llmAgent = LlmAgent.builder()
                 .name(NAME)
                 .model(MODEL)
-                .description("Personal agent to answer questions about the country and its capitals")
-                .instruction("You are a helful agent")
-                .beforeToolCallbackSync(beforeTool)
-                .afterToolCallbackSync(afterTool)
+                .description("You are a helpful agent")
+                .instruction("""
+                             You are an agent that can find capital cities.
+                             Use the getCapitalCity tool.
+                             """)
+                .tools(FunctionTool.create(this.getClass(), "getCapitalCity"))
+                .beforeToolCallbackSync(AiCallbacks.beforeTool)
+                .afterToolCallbackSync(AiCallbacks.afterTool)
                 .build();
 
         AgentExecutor.execute(llmAgent, NAME, MODEL, null, null);
+    }
+    
+    public static Map<String, Object> getCapitalCity(
+            @Annotations.Schema(name="country", description = "The country to find the capital of")
+                    String country) {
+        String capital = AiUtility.countriesWithCapitals()
+                .getOrDefault(country.toLowerCase(), "Capital not found for " + country);
+        
+        return Map.of(country, capital);
     }
 }
