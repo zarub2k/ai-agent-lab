@@ -112,7 +112,17 @@ public final class AiCallbacks {
     
     public static Callbacks.AfterToolCallbackSync afterTool =
             (invocationContext, baseTool, input, toolContext, response) -> {
-                System.out.println("After tool");
+                System.out.println("Callback after tool: " + invocationContext.agent().name());
+                System.out.println("Input after: " + input);
+                System.out.println("Actual response: " + response.toString());
+                
+                if (response instanceof Map value) {
+                    String capital = (String) value.get(input.get("country"));
+                    if ("getCapitalCity".equals(baseTool.name()) && "Berlin".equals(capital)) {
+                        return Optional.of(Map.of((String)input.get("country"), "::>" + capital + "<::"));
+                    }
+                }
+                
                 return Optional.empty();
             };
     
