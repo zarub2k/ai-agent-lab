@@ -25,13 +25,13 @@ public class AgentWithAgentCallback {
                 .afterAgentCallbackSync(AiCallbacks.afterAgent)
                 .build();
 
-        AgentExecutor.execute(llmAgent, NAME, MODEL, null, null);
-//        
+//        AgentExecutor.execute(llmAgent, NAME, MODEL, null, null);
+        
 //        AgentExecutor.execute(llmAgent, NAME, MODEL,
 //                new ConcurrentHashMap<>(Map.of("skip_llm_agent", true)), null);
         
-//        AgentExecutor.execute(llmAgent, NAME, MODEL,
-//                new ConcurrentHashMap<>(Map.of("add_concluding_note", true)), null);
+        AgentExecutor.execute(llmAgent, NAME, MODEL,
+                new ConcurrentHashMap<>(Map.of("add_concluding_note", true)), null);
 
 //        AgentExecutor.execute(llmAgent, NAME, MODEL,
 //                new ConcurrentHashMap<>(Map.of("skip_llm_agent", true, "add_concluding_note", true)), null);

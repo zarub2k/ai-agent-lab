@@ -7,6 +7,7 @@ import com.google.adk.models.LlmResponse;
 import com.google.adk.sessions.State;
 import com.google.genai.types.Content;
 import com.google.genai.types.Part;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -44,7 +45,7 @@ public final class AiCallbacks {
                 if (Boolean.TRUE.equals(state.get("add_concluding_note"))) {
                     return Optional.of(
                             buildContent("model", 
-                                    "Concluding note was added. Replacing original output with this one"));
+                                    "Agent response is overwritten by the after agent callback!!!"));
                 }
                 
                 return Optional.empty();
@@ -61,7 +62,7 @@ public final class AiCallbacks {
                     userMessage = contents.getLast().parts().get().get(0).text().orElse("");
                 }
                 
-                System.out.println("Inspecting last user message: " + userMessage);
+                System.out.println("Inspecting last user message::: " + userMessage);
                 if (userMessage.toUpperCase().contains("ISS")) {
                     return Optional.of(
                             buildResponse("model", "LLM call is blocked by the before model callback"));
@@ -76,20 +77,17 @@ public final class AiCallbacks {
                 
                 Content originalContent = llmResponse.content().get();
                 
-//                Optional<Part> firstTextPartOpt = llmResponse
-//                        .content()
-//                        .flatMap(Content::parts)
-//                        .filter(parts -> !parts.isEmpty() && parts.get(0).text().isPresent())
-//                        .map(parts -> parts.get(0));
                 String originalText = originalContent.parts().get().getLast().text().get();
                 
                 System.out.println("originalText: " + originalText);
+                System.out.println("---->");
                 String modifiedText = AiUtility.findAndReplace(originalText);
                 if (!"".equals(modifiedText)) {
                     return Optional.of(
                         LlmResponse
                             .builder()
-                            .content(originalContent.toBuilder().parts(List.of(Part.fromText(modifiedText))).build())
+                            .content(originalContent.toBuilder()
+                                    .parts(List.of(Part.fromText(modifiedText))).build())
                             .groundingMetadata(llmResponse.groundingMetadata())
                             .build());
                 }
@@ -103,7 +101,7 @@ public final class AiCallbacks {
                 System.out.println("Tool name: " + baseTool.name());
                 System.out.println("Input: " + input);
                 
-                if (input.get("country").equals("dummy")) {
+                if ("getCapitalCity".equals(baseTool.name()) && input.get("country").equals("chad")) {
                     return Optional.of(Map.of("result", "Tool execution is blocked :("));
                 }
                 
@@ -117,9 +115,36 @@ public final class AiCallbacks {
                 System.out.println("Actual response: " + response.toString());
                 
                 if (response instanceof Map value) {
-                    String capital = (String) value.get(input.get("country"));
-                    if ("getCapitalCity".equals(baseTool.name()) && "Berlin".equals(capital)) {
-                        return Optional.of(Map.of((String)input.get("country"), "::>" + capital + "<::"));
+                    Map modifiedResponse = new HashMap<String, Object>(value);
+//                    String capital = (String) value.get(input.get("country"));
+                    Object result = value.get("result");
+                    if ("getCapitalCity".equals(baseTool.name()) && result instanceof String capital && "Berlin".equalsIgnoreCase(capital)) {
+                        System.out.println("Condition met....");
+//                        
+                        modifiedResponse.put("result", capital + "(note) modified by after tool callback");
+                        modifiedResponse.put("note_added_by_callback", true);
+                        
+                        System.out.println(modifiedResponse);
+                        
+                        return Optional.of(modifiedResponse);
+
+                        
+//                        return Optional.of(
+//                                Map.of((String) input.get("country") + ">>", "::>" + capital + "<::"));
+                    }
+                    
+                    if ("add".equals(baseTool.name()) && result instanceof Integer total && total.intValue() == 5) {
+                        System.out.println("Condition met....");
+//                        
+                        modifiedResponse.put("result", total + "(note) modified by after tool callback");
+                        modifiedResponse.put("note_added_by_callback", true);
+
+                        System.out.println(modifiedResponse);
+
+                        return Optional.of(modifiedResponse);
+
+//                        return Optional.of(
+//                                Map.of((String) input.get("country") + ">>", "::>" + capital + "<::"));
                     }
                 }
                 

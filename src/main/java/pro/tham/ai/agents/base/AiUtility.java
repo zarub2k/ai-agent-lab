@@ -27,7 +27,7 @@ public class AiUtility {
         return Map.of(
                 "india", "New Delhi",
                 "england", "London",
-                "united States of America", "Washington, D.C.",
+                "usa", "Washington, D.C.",
                 "canada", "Ottawa",
                 "australia", "Canberra",
                 "germany", "Berlin"

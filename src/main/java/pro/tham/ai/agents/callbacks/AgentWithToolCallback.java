@@ -24,8 +24,10 @@ public class AgentWithToolCallback {
                 .instruction("""
                              You are an agent that can find capital cities.
                              Use the getCapitalCity tool.
+                             And you can also total two nmbers, use the add tool for that
                              """)
-                .tools(FunctionTool.create(this.getClass(), "getCapitalCity"))
+                .tools(FunctionTool.create(this.getClass(), "getCapitalCity"),
+                        FunctionTool.create(this.getClass(), "add"))
                 .beforeToolCallbackSync(AiCallbacks.beforeTool)
                 .afterToolCallbackSync(AiCallbacks.afterTool)
                 .build();
@@ -36,9 +38,17 @@ public class AgentWithToolCallback {
     public static Map<String, Object> getCapitalCity(
             @Annotations.Schema(name="country", description = "The country to find the capital of")
                     String country) {
+        System.out.println("getCapitalCity() tool is called");
         String capital = AiUtility.countriesWithCapitals()
-                .getOrDefault(country.toLowerCase(), "Capital not found for " + country);
+                .getOrDefault(country.toLowerCase(), "Capital is not found for " + country);
         
-        return Map.of(country, capital);
+        return Map.of("result", capital);
+    }
+    
+    public static Map<String, Object> add(
+            @Annotations.Schema(name = "num1", description = "The first number") int num1,
+            @Annotations.Schema(name = "num2", description = "The second number") int num2) {
+        System.out.println("add() tool is called");
+        return Map.of("result", num1 + num2);
     }
 }
